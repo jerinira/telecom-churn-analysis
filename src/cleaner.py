@@ -89,7 +89,7 @@ def impute_total_charges(df: pd.DataFrame) -> Tuple[pd.DataFrame, dict]:
     Pass 1 — Business rule imputation:
         Customers with tenure_months == 0 have not yet completed a billing
         cycle. Their total_charges should logically be 0.0, not missing.
-        This is structured missingness with a known business cause.
+        This is structured missingness with a known business cause. 
 
     Pass 2 — Median imputation:
         Any remaining NaN values after Pass 1 are imputed using the column
