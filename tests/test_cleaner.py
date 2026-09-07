@@ -54,6 +54,13 @@ def categorical_missing_df():
             "Electronic check",
             np.nan,
             "Mailed check",
-            null,
+            "Electronic check",
         ],
     })
+#-------TEST----------
+def test_standardise_column_names_lowercases():
+    df= pd.DataFrame({"CustomerID":[1], "Monthly Charges":[50.0]})
+    result=standardise_column_names(df)
+    print(result)
+if __name__=="__main__":
+    test_standardise_column_names_lowercases()
