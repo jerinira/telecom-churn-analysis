@@ -3,7 +3,8 @@ import os
 import pandas as pd
 import plotly.express as px
 
-DATA_PATH = r"E:\BongoDev-AI-Professional_Bootcamp\telecom-churn-analysis\data\processed\telecom_customers_processed.csv"
+DATA_PATH = "data/processed/telecom_customers_processed.csv"
+# DATA_PATH = r"E:\BongoDev-AI-Professional_Bootcamp\telecom-churn-analysis\data\processed\telecom_customers_processed.csv"
 HIGH_RISK_CONTRACT = "Month-To-Month"
 HIGH_RISK_INTERNET = "Fiber optic"
 HIGH_RISK_TENURE_MONTHS = 12
