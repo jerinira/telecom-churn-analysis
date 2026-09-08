@@ -66,7 +66,11 @@ st.sidebar.write(f"Showing **{len(filtered_df):,}** of **{len(df):,}** customers
 # Step 4: Key Performance Index (KPIs)
 total_customers = len(filtered_df)
 total_churned = int((filtered_df["churn"] == "Yes").sum())
-churn_rate = (total_churned / total_customers) * 100
+if total_customers > 0:
+    churn_rate = (total_churned / total_customers) * 100
+else:
+    churn_rate = 0
+# churn_rate = (total_churned / total_customers) * 100
 avg_monthly_charge = filtered_df["monthly_charges"].mean()
 
 st.header("Key Performance Index")
@@ -77,7 +81,6 @@ col3.metric("Churn Rate", f"{churn_rate:.1f}%")
 col4.metric("Avg Monthly Charge", f"${avg_monthly_charge:.2f}")
 
 st.divider()
-
 # Step 5: Overall churn pie chart
 st.header("Churn Split")
 st.write("Out of all customers we're looking at, how many stayed vs left?")
@@ -85,27 +88,33 @@ st.write("Out of all customers we're looking at, how many stayed vs left?")
 if filtered_df.empty:
     st.warning("No customers left.")
 else:
-    churn_counts = filtered_df['churn'].value_counts().reset_index()
-    print(churn_counts)
-    print(churn_counts.columns)
+    # Count churned vs retained customers
+    churn_counts = (
+        filtered_df["churn"]
+        .value_counts()
+        .reset_index()
+    )
 
-fig_pie = px.pie(
-    churn_counts,
-    names="churn",
-    values="count",
-    color="churn",
-    color_discrete_map=CHURN_COLOR_MAP,
-    title="Customers: Churned vs Retained",
-    hole=0.4,
-)
+    # Rename columns explicitly
+    churn_counts.columns = ["churn", "count"]
 
-st.plotly_chart(
-    fig_pie,
-    use_container_width=True,
-)
+    fig_pie = px.pie(
+        churn_counts,
+        names="churn",
+        values="count",
+        color="churn",
+        color_discrete_map=CHURN_COLOR_MAP,
+        title="Customers: Churned vs Retained",
+        hole=0.4,
+    )
 
-st.info("Findings: ...")
-st.info("Action: ...")
+    st.plotly_chart(
+        fig_pie,
+        use_container_width=True,
+    )
+
+    st.info("Findings: ...")
+    st.info("Action: ...")
 
 st.divider()
 
