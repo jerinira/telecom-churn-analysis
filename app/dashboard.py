@@ -113,8 +113,68 @@ else:
         use_container_width=True,
     )
 
-    st.info("Findings: ...")
-    st.info("Action: ...")
+    # st.info("Findings: ...")
+    # st.info("Action: ...")
+
+    # =========================
+    # Dynamic Findings & Action
+    # =========================
+
+    total_customers = len(filtered_df)
+    churned_customers = (filtered_df["churn"] == "Yes").sum()
+    retained_customers = (filtered_df["churn"] == "No").sum()
+
+    churn_rate = (churned_customers / total_customers) * 100
+    retention_rate = (retained_customers / total_customers) * 100
+
+    # Findings
+    if churn_rate >= 30:
+        finding = (
+            f"**{churn_rate:.1f}%** of customers have churned "
+            f"({churned_customers:,} out of {total_customers:,}). "
+            f"This is a high churn rate and indicates a significant "
+            f"customer retention challenge."
+        )
+
+    elif churn_rate >= 20:
+        finding = (
+            f"**{churn_rate:.1f}%** of customers have churned "
+            f"({churned_customers:,} out of {total_customers:,}), "
+            f"while **{retention_rate:.1f}%** have been retained. "
+            f"Nearly 1 in 4 customers has left."
+        )
+
+    else:
+        finding = (
+            f"**{churn_rate:.1f}%** of customers have churned "
+            f"({churned_customers:,} out of {total_customers:,}), "
+            f"while **{retention_rate:.1f}%** have been retained. "
+            f"The overall churn rate is relatively low."
+        )
+
+    # Action
+    if churn_rate >= 30:
+        action = (
+            "Prioritize high-risk customers and investigate the main "
+            "drivers of churn. Consider targeted retention offers, "
+            "better customer support, and incentives for longer-term contracts."
+        )
+
+    elif churn_rate >= 20:
+        action = (
+            "Investigate which customer segments contribute most to churn "
+            "and develop targeted retention strategies for those groups."
+        )
+
+    else:
+        action = (
+            "Continue monitoring churn and identify the characteristics "
+            "of the remaining churned customers to prevent future losses."
+        )
+
+    st.info(f"**Findings:** {finding}")
+    st.info(f"**Action:** {action}")
+
 
 st.divider()
 
@@ -204,8 +264,8 @@ else:
 
 st.divider()
 
-st.header("")
-st.write("...")
+st.header("High-Risk Customers List")
+# st.write("...")
 
 high_risk_df = filtered_df[
     (filtered_df["contract_type"] == HIGH_RISK_CONTRACT)
@@ -214,7 +274,8 @@ high_risk_df = filtered_df[
 ][["customer_id", "tenure_months", "monthly_charges", "churn"]]
 
 st.dataframe(high_risk_df, use_container_width=True)
-st.caption("....")
+# st.caption("Customers identified as high-risk based on their contract type, "
+#     "internet service, and short tenure.")
 
 st.download_button(
     "⬇ Download High-Risk Customer List",
